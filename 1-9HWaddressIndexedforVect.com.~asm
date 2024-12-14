@@ -1,3 +1,4 @@
+; 5.3	ExploraÈ›i utilizarea adresÄƒrii indexate pentru a accesa È™i modifica elemente dintr-un vector.
 org 100h       ; Program pentru un fi?ier .com (executabil mic)
 
 ;-------------------------
@@ -9,7 +10,7 @@ mov ds, ax     ; DS = ax (segmentul sursa)
 ;-------------------------
 ; Ini?ializarea parametrilor
 ;-------------------------
-mov si, offset vector ; SI indica începutul vectorului
+mov si, offset vector ; SI indica Ã®nceputul vectorului
 mov cx, 5             ; Numarul de elemente din vector
 mov bl, 10h           ; Valoarea constanta de adaugat
 
@@ -17,9 +18,9 @@ mov bl, 10h           ; Valoarea constanta de adaugat
 ; Modificarea vectorului
 ;-------------------------
 modify_loop:
-mov al, [si]       ; Încarca elementul curent din vector în AL
+mov al, [si]       ; ÃŽncarca elementul curent din vector Ã®n AL
 add al, bl         ; Adauga valoarea constanta (BL) la element
-mov [si], al       ; Stocheaza valoarea modificata înapoi în vector
+mov [si], al       ; Stocheaza valoarea modificata Ã®napoi Ã®n vector
 inc si             ; Trecem la urmatorul element
 loop modify_loop   ; Decrementeaza CX ?i repeta daca CX > 0
 
