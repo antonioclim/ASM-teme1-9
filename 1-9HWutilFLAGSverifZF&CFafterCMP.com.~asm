@@ -1,0 +1,78 @@
+;6.3 Explora?i utilizarea registrului FLAGS prin verificarea st?rii indicatorilor ZF ?i CF dup? o opera?ie de compara?ie
+org 100h       ; Program pentru un fi?ier .com (executabil mic)
+
+;-------------------------
+; Ini?ializarea segmentelor
+;-------------------------
+mov ax, @data  ; Setam segmentul de date
+mov ds, ax     ; DS = ax (segmentul de date)
+
+;-------------------------
+; Opera?ia de compara?ie
+;-------------------------
+mov al, 10h    ; Încarca valoarea 10h în AL
+mov bl, 20h    ; Încarca valoarea 20h în BL
+
+cmp al, bl     ; Compara AL cu BL (AL - BL)
+; Rezultatul afecteaza FLAGS (ZF, CF, etc.)
+
+;-------------------------
+; Verificarea indicatorului ZF (Zero Flag)
+;-------------------------
+je equal        ; Daca ZF = 1 (AL == BL), sarim la eticheta "equal"
+jne not_equal   ; Daca ZF = 0 (AL != BL), sarim la eticheta "not_equal"
+
+;-------------------------
+; Verificarea indicatorului CF (Carry Flag)
+;-------------------------
+jc less_than    ; Daca CF = 1 (AL < BL), sarim la "less_than"
+jnc greater_than; Daca CF = 0 (AL >= BL), sarim la "greater_than"
+
+;-------------------------
+; Etichete pentru rezultat
+;-------------------------
+equal:
+mov ah, 09h     ; Afi?am mesajul "Egal"
+lea dx, msg_equal
+int 21h
+jmp end_program
+
+not_equal:
+mov ah, 09h     ; Afi?am mesajul "Nu sunt egale"
+lea dx, msg_not_equal
+int 21h
+jmp end_program
+
+less_than:
+mov ah, 09h     ; Afi?am mesajul "Mai mic"
+lea dx, msg_less
+int 21h
+jmp end_program
+
+greater_than:
+mov ah, 09h     ; Afi?am mesajul "Mai mare"
+lea dx, msg_greater
+int 21h
+jmp end_program
+
+;-------------------------
+; Terminarea programului
+;-------------------------
+end_program:
+mov ah, 4Ch     ; Func?ia DOS pentru terminare
+int 21h         ; Terminare program
+
+;-------------------------
+; Date
+;-------------------------
+data segment
+msg_equal db 'Egal$', 0
+msg_not_equal db 'Nu sunt egale$', 0
+msg_less db 'Mai mic$', 0
+msg_greater db 'Mai mare$', 0
+data ends
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\1-9HWutilFLAGSverifZF&CFafterCMP.asm
