@@ -1,3 +1,4 @@
+; 5.1	ScrieÈ›i un program care sÄƒ copieze un vector dintr-un segment Ã®n altul folosind registrele SI È™i DI
 org 100h       ; Program pentru un fi?ier .com (executabil mic)
 
 ;-------------------------
@@ -11,8 +12,8 @@ mov es, ax     ; ES = ax (segmentul destina?ie)
 ;-------------------------
 ; Ini?ializarea vectorului sursa
 ;-------------------------
-mov si, offset vector_sursa ; SI indica începutul vectorului sursa
-mov di, offset vector_dest  ; DI indica începutul vectorului destina?ie
+mov si, offset vector_sursa ; SI indica Ã®nceputul vectorului sursa
+mov di, offset vector_dest  ; DI indica Ã®nceputul vectorului destina?ie
 
 mov cx, 5      ; Numar de elemente din vector (lungimea vectorului)
 
@@ -20,8 +21,8 @@ mov cx, 5      ; Numar de elemente din vector (lungimea vectorului)
 ; Copierea vectorului
 ;-------------------------
 copy_loop:
-lodsb      ; Încarca un octet din [DS:SI] în AL ?i incrementeaza SI
-stosb      ; Stocheaza AL în [ES:DI] ?i incrementeaza DI
+lodsb      ; ÃŽncarca un octet din [DS:SI] Ã®n AL ?i incrementeaza SI
+stosb      ; Stocheaza AL Ã®n [ES:DI] ?i incrementeaza DI
 loop copy_loop ; Decrementeaza CX ?i repeta daca CX > 0
 
 ;-------------------------
