@@ -1,0 +1,41 @@
+;6.1Implementa?i un program care s? înmul?easc? dou? numere utilizând registrele AX ?i BX
+org 100h       ; Program pentru un fi?ier .com (executabil mic)
+
+;-------------------------
+; Ini?ializarea segmentelor
+;-------------------------
+mov ax, @data  ; Setam segmentul de date
+mov ds, ax     ; DS = ax (segmentul de date)
+
+;-------------------------
+; Înmul?irea numerelor
+;-------------------------
+mov ax, 5      ; Primul numar (pe 16 bi?i) în AX
+mov bx, 10     ; Al doilea numar (pe 16 bi?i) în BX
+
+mul bx         ; Înmul?e?te AX cu BX: DX:AX = AX * BX
+
+;-------------------------
+; Stocarea rezultatului
+;-------------------------
+mov result_low, ax ; Partea inferioara a rezultatului în memoria `result_low`
+mov result_high, dx ; Partea superioara a rezultatului în memoria `result_high`
+
+;-------------------------
+; Terminarea programului
+;-------------------------
+mov ah, 4Ch    ; Func?ia DOS pentru terminare
+int 21h        ; Terminare program
+
+;-------------------------
+; Date
+;-------------------------
+data segment
+result_low dw ?         ; Rezervam spa?iu pentru partea inferioara a rezultatului
+result_high dw ?        ; Rezervam spa?iu pentru partea superioara a rezultatului
+data ends
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\1-9HWMUL2noAXBX.asm
