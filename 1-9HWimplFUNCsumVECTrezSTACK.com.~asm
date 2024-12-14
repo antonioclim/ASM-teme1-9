@@ -1,0 +1,74 @@
+org 100h       ; Program pentru un fi?ier .com (executabil mic)
+
+;-------------------------
+; Ini?ializarea segmentelor
+;-------------------------
+mov ax, @data  ; Setam segmentul de date
+mov ds, ax     ; DS = ax (segmentul sursa)
+mov es, ax     ; ES = ax (segmentul destina?ie, daca este necesar)
+
+;-------------------------
+; Apelul func?iei
+;-------------------------
+mov ax, offset vector ; Adresa vectorului în AX
+push ax               ; Punem adresa vectorului pe stiva
+mov cx, 5             ; Lungimea vectorului (5 elemente)
+push cx               ; Punem lungimea pe stiva
+
+call suma_vector      ; Apelam func?ia care calculeaza suma
+
+; Rezultatul este pe stiva; îl scoatem în AX
+pop ax                ; Scoatem suma de pe stiva ?i o punem în AX
+
+;-------------------------
+; Terminarea programului
+;-------------------------
+mov ah, 4Ch           ; Func?ia DOS pentru terminare
+int 21h               ; Terminare program
+
+;-------------------------
+; Func?ie: suma_vector
+;-------------------------
+suma_vector proc
+push bp            ; Salvam BP pe stiva
+mov bp, sp         ; Ini?ializam BP pentru a accesa parametrii pe stiva
+mov si, [bp+4]     ; SI = adresa vectorului (parametrul 1 de pe stiva)
+mov cx, [bp+6]     ; CX = lungimea vectorului (parametrul 2 de pe stiva)
+xor ax, ax         ; AX = 0 (suma ini?iala)
+
+; Accesam rapid vectorul cu instruc?iuni mai eficiente
+suma_fast:
+shr cx, 1          ; Împar?im numarul de elemente la 2 (vector pe 8 bi?i în grupuri de 2)
+jz suma_odd        ; Daca ramâne un element, sarim la tratamentul pentru elementul impar
+
+; Procesare pe perechi
+xor dx, dx         ; Folosim DX pentru extensie
+fast_loop:
+mov bx, [si]   ; Încarca doua elemente de 8 bi?i în BX (grup de 16 bi?i)
+add ax, bx     ; Adunam direct în AX (BX con?ine cele doua elemente grupate)
+add si, 2      ; Trecem la urmatoarele doua elemente
+loop fast_loop ; Continuam pâna CX devine 0
+
+suma_odd:
+test cx, 1         ; Verificam daca mai este un element (daca CX era impar)
+jz suma_done       ; Daca nu mai este nimic, ie?im
+mov bl, [si]       ; Încarca ultimul element ramas
+add ax, bx         ; Aduna-l la suma
+
+suma_done:
+push ax            ; Punem suma pe stiva (rezultatul func?iei)
+pop bp             ; Restauram BP din stiva
+ret 4              ; Ie?im din func?ie ?i cura?am cei 2 parametri (2 * 2 octe?i)
+suma_vector endp
+
+;-------------------------
+; Date
+;-------------------------
+data segment
+vector db 10h, 20h, 30h, 40h, 50h ; Vectorul de test (5 elemente)
+data ends
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\1-9HWimplFUNCsumVECTrezSTACK.asm
