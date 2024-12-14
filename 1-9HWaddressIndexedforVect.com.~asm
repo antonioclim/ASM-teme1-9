@@ -1,0 +1,42 @@
+org 100h       ; Program pentru un fi?ier .com (executabil mic)
+
+;-------------------------
+; Ini?ializarea segmentelor
+;-------------------------
+mov ax, @data  ; Setam segmentul de date
+mov ds, ax     ; DS = ax (segmentul sursa)
+
+;-------------------------
+; Ini?ializarea parametrilor
+;-------------------------
+mov si, offset vector ; SI indica începutul vectorului
+mov cx, 5             ; Numarul de elemente din vector
+mov bl, 10h           ; Valoarea constanta de adaugat
+
+;-------------------------
+; Modificarea vectorului
+;-------------------------
+modify_loop:
+mov al, [si]       ; Încarca elementul curent din vector în AL
+add al, bl         ; Adauga valoarea constanta (BL) la element
+mov [si], al       ; Stocheaza valoarea modificata înapoi în vector
+inc si             ; Trecem la urmatorul element
+loop modify_loop   ; Decrementeaza CX ?i repeta daca CX > 0
+
+;-------------------------
+; Terminarea programului
+;-------------------------
+mov ah, 4Ch           ; Func?ia DOS pentru terminare
+int 21h               ; Terminare program
+
+;-------------------------
+; Date
+;-------------------------
+data segment
+vector db 10h, 20h, 30h, 40h, 50h ; Vectorul de test (5 elemente)
+data ends
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\1-9HWaddressIndexedforVect.asm
