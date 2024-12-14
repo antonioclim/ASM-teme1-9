@@ -1,0 +1,44 @@
+; 6.2 Scrie?i un program care s? copieze un ?ir de caractere dintr-un segment în altul folosind registrele SI ?i DI
+org 100h       ; Program pentru un fi?ier .com (executabil mic)
+
+;-------------------------
+; Ini?ializarea segmentelor
+;-------------------------
+mov ax, @data  ; Setam segmentul de date
+mov ds, ax     ; DS = segmentul sursa
+mov ax, 0x7000 ; Segmentul destina?ie este la adresa 0x7000
+mov es, ax     ; ES = segmentul destina?ie
+
+;-------------------------
+; Ini?ializarea indicilor
+;-------------------------
+mov si, offset source_string ; SI indica începutul ?irului sursa
+mov di, offset dest_string   ; DI indica începutul ?irului destina?ie
+
+;-------------------------
+; Copierea ?irului de caractere
+;-------------------------
+copy_loop:
+lodsb         ; Încarca un octet din [DS:SI] în AL ?i incrementeaza SI
+stosb         ; Stocheaza AL în [ES:DI] ?i incrementeaza DI
+cmp al, 0     ; Verificam daca am ajuns la terminatorul '\0'
+jne copy_loop ; Daca nu este '\0', continuam copierea
+
+;-------------------------
+; Terminarea programului
+;-------------------------
+mov ah, 4Ch   ; Func?ia DOS pentru terminare
+int 21h       ; Terminare program
+
+;-------------------------
+; Date
+;-------------------------
+data segment
+source_string db 'Hello, world!', 0 ; ?irul sursa terminat cu '\0'
+dest_string db 20 dup (?)           ; Rezervam spa?iu pentru ?irul destina?ie
+data ends
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\1-9HWcopySTRINGSIDI.asm
