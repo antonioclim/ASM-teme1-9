@@ -1,3 +1,4 @@
+; 5.2	Implementa»õi o func»õie care calculeazƒÉ suma elementelor unui vector »ôi returneazƒÉ rezultatul pe stivƒÉ
 org 100h       ; Program pentru un fi?ier .com (executabil mic)
 
 ;-------------------------
@@ -10,15 +11,15 @@ mov es, ax     ; ES = ax (segmentul destina?ie, daca este necesar)
 ;-------------------------
 ; Apelul func?iei
 ;-------------------------
-mov ax, offset vector ; Adresa vectorului Ón AX
+mov ax, offset vector ; Adresa vectorului √Æn AX
 push ax               ; Punem adresa vectorului pe stiva
 mov cx, 5             ; Lungimea vectorului (5 elemente)
 push cx               ; Punem lungimea pe stiva
 
 call suma_vector      ; Apelam func?ia care calculeaza suma
 
-; Rezultatul este pe stiva; Ól scoatem Ón AX
-pop ax                ; Scoatem suma de pe stiva ?i o punem Ón AX
+; Rezultatul este pe stiva; √Æl scoatem √Æn AX
+pop ax                ; Scoatem suma de pe stiva ?i o punem √Æn AX
 
 ;-------------------------
 ; Terminarea programului
@@ -38,21 +39,21 @@ xor ax, ax         ; AX = 0 (suma ini?iala)
 
 ; Accesam rapid vectorul cu instruc?iuni mai eficiente
 suma_fast:
-shr cx, 1          ; Œmpar?im numarul de elemente la 2 (vector pe 8 bi?i Ón grupuri de 2)
-jz suma_odd        ; Daca ram‚ne un element, sarim la tratamentul pentru elementul impar
+shr cx, 1          ; √émpar?im numarul de elemente la 2 (vector pe 8 bi?i √Æn grupuri de 2)
+jz suma_odd        ; Daca ram√¢ne un element, sarim la tratamentul pentru elementul impar
 
 ; Procesare pe perechi
 xor dx, dx         ; Folosim DX pentru extensie
 fast_loop:
-mov bx, [si]   ; Œncarca doua elemente de 8 bi?i Ón BX (grup de 16 bi?i)
-add ax, bx     ; Adunam direct Ón AX (BX con?ine cele doua elemente grupate)
+mov bx, [si]   ; √éncarca doua elemente de 8 bi?i √Æn BX (grup de 16 bi?i)
+add ax, bx     ; Adunam direct √Æn AX (BX con?ine cele doua elemente grupate)
 add si, 2      ; Trecem la urmatoarele doua elemente
-loop fast_loop ; Continuam p‚na CX devine 0
+loop fast_loop ; Continuam p√¢na CX devine 0
 
 suma_odd:
 test cx, 1         ; Verificam daca mai este un element (daca CX era impar)
 jz suma_done       ; Daca nu mai este nimic, ie?im
-mov bl, [si]       ; Œncarca ultimul element ramas
+mov bl, [si]       ; √éncarca ultimul element ramas
 add ax, bx         ; Aduna-l la suma
 
 suma_done:
