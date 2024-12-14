@@ -1,0 +1,44 @@
+org 100h       ; Program pentru un fi?ier .com (executabil mic)
+
+;-------------------------
+; Ini?ializarea segmentelor
+;-------------------------
+mov ax, data   ; Setam segmentul de date
+mov ds, ax     ; DS = ax (segmentul sursa)
+mov ax, 0x7000 ; Segmentul destina?ie este la adresa 0x7000
+mov es, ax     ; ES = ax (segmentul destina?ie)
+
+;-------------------------
+; Ini?ializarea vectorului sursa
+;-------------------------
+mov si, offset vector_sursa ; SI indica începutul vectorului sursa
+mov di, offset vector_dest  ; DI indica începutul vectorului destina?ie
+
+mov cx, 5      ; Numar de elemente din vector (lungimea vectorului)
+
+;-------------------------
+; Copierea vectorului
+;-------------------------
+copy_loop:
+lodsb      ; Încarca un octet din [DS:SI] în AL ?i incrementeaza SI
+stosb      ; Stocheaza AL în [ES:DI] ?i incrementeaza DI
+loop copy_loop ; Decrementeaza CX ?i repeta daca CX > 0
+
+;-------------------------
+; Terminarea programului
+;-------------------------
+mov ah, 4Ch    ; Func?ia 4Ch DOS: terminare program
+int 21h        ; Terminare
+
+;-------------------------
+; Date
+;-------------------------
+data segment
+vector_sursa db 10h, 20h, 30h, 40h, 50h ; Vector sursa (5 octe?i)
+vector_dest  db 5 dup (?)               ; Vector destina?ie (spa?iu rezervat)
+data ends
+
+
+
+
+; [SOURCE]: C:\emu8086\MySource\1-9HWcopyVECTformStoSwithSIDI.asm
